@@ -8,9 +8,9 @@ The input directory should contain
 
   - verilog files describing the gates (and.v, nand.v,xor.v, and struct.v)
   - options.csv file
-  - input.json 
-  - output.json
-  - UCF.json
+  - input.json file (Eg. Eco1C1G1T1.input.json)
+  - output.json file (Eg. Eco1C1G1T1.output.json)
+  - UCF.json file  (Eg. Eco1C1G1T1.UCF.json)
   
 The scripts saves the CelloResults in the output directory specified.
 
