@@ -11,7 +11,7 @@ The input directory should contain
   - input.json 
   - output.json
   - UCF.json
-  - 
+  
 The scripts saves the CelloResults in the output directory specified.
 
 The script displays the score for the original circuit as well as the score for the optimized circuit.
