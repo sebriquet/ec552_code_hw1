@@ -114,16 +114,14 @@ output_json(data, in_dir, new_input_file)
 
 # Submit modified input file to Cello
 # Set up input files.
-in_ucf = f'{chassis_name}.UCF.json'
-input_sensor_file = f'new{chassis_name}.input.json'
-output_device_file = f'{chassis_name}.output.json'
+new_input_sensor_file = f'new{chassis_name}.input.json'
 q = CelloQuery(
     input_directory=in_dir,
     output_directory=out_dir,
     verilog_file=v_file,
     compiler_options=options,
     input_ucf=in_ucf,
-    input_sensors=input_sensor_file,
+    input_sensors=new_input_sensor_file,
     output_device=output_device_file,
 )
 
