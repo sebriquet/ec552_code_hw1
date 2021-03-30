@@ -14,5 +14,5 @@ The input directory should contain
   
 The scripts saves the CelloResults in the output directory specified.
 
-The script displays the score for the original circuit as well as the score for the optimized circuit.
+The script displays the score for the original circuit witht he best two input signals as well as the score for the optimized circuit (using previous signals).
 
