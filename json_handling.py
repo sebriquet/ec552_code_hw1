@@ -7,7 +7,7 @@ import os
 
 # function to open and extract data from json file (input)
 def open_json(in_dir, file_name):
-    input_file = os.path.join(in_dir, file_name)
+    input_file = in_dir + file_name
     file = open(input_file, "r")
     data = json.load(file)
     file.close()
@@ -82,3 +82,5 @@ def modify_parameters_single_signal(data, signal_name, new_ymax, new_ymin, new_a
         data[10]['parameters'][3]['value'] = new_beta
     return data
 
+
+# write function to create combinations of modified parameters

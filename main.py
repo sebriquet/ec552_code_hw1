@@ -7,8 +7,12 @@ from itertools import combinations
 # ASK USER TO PROVIDE FILE PATH OF INPUT AND OUTPUT DIRECTORIES AS WELL AS DESIRED GATE
 from click._compat import raw_input
 
-prompt = "Please enter the path of your input directory containing: input.json file, output.json file," \
-         "UCF.json file and verilog files (boolean gates): "
+prompt = "Please enter the path of your input directory containing: \n" \
+         " input.json file \n" \
+         " output.json file \n" \
+         " UCF.json file \n" \
+         " and verilog files (boolean gates)  \n" \
+         "path: "
 in_dir = raw_input(prompt)
 assert os.path.exists(in_dir), "I did not find directory name at, " + str(in_dir)
 prompt2 = "Please enter path for where you want to save results: "
@@ -77,13 +81,18 @@ def change_promoter(ymax, ymin, x):
 
 # 2) STRONGER/WEAKER RBS (depending on x value)
 def change_rbs(beta, x):
-    new_beta = beta / x
+    new_beta = beta * x
     return new_beta
 
 
 # try powers of 10 for x (to make weaker/stronger promoter and RBS)
 x_values = [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000]
-# TRY NUMERICAL OPTIMIZATION HERE
+# test minimizing one signal and max the other
+[new_ymax_one, new_ymin_one] = change_promoter(ymax_one, ymin_one, 0.001)
+new_beta_one = change_rbs(beta_one, 0.001)
+[new_ymax_two, new_ymin_two] = change_promoter(ymax_two, ymin_two, 100)
+new_beta_two = change_rbs(beta_two, 100)
+
 
 # if score doesn't improve significantly, use protein-engineering operations
 # 3) STRETCH --> x can be at most 1.5
@@ -107,6 +116,8 @@ def decrease_slope(alpha, x):
 
 # WRITE AND SAVE MODIFIED INPUT JSON FILE
 # call modify_parameters_single_signal for both signals
+data = modify_parameters_single_signal(data, best_input_signals[0], new_ymax_one, new_ymin_one, alpha_one ,new_beta_one )
+data = modify_parameters_single_signal(data, best_input_signals[1], new_ymax_two, new_ymin_two, alpha_two, new_beta_two)
 
 # convert new file to json and save to input directory
 new_input_file = f'new{chassis_name}.input.json'
