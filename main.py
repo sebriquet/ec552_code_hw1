@@ -6,6 +6,7 @@ from itertools import combinations
 from random import seed
 from random import random
 from random import choice
+import matplotlib.pyplot as plt
 
 
 # ASK USER TO PROVIDE FILE PATH OF INPUT AND OUTPUT DIRECTORIES AS WELL AS DESIRED GATE
@@ -26,7 +27,8 @@ v_file = input("Please state which gate (eg: 'and.v') file you want to use: ")
 options = 'options.csv'
 
 # define chassis to evaluate
-chassis_name = input("which chassis do you want to evaluate: ")
+# chassis_name = input("which chassis do you want to evaluate: ")
+chassis_name = 'Eco1C1G1T1'
 input_sensor_file = f'/{chassis_name}.input.json'
 # read input json file
 data = open_json(in_dir, input_sensor_file)
@@ -89,23 +91,23 @@ def change_rbs(beta, x):
     return new_beta
 
 
-# generate 4 random numbers between 0.001 and 1000 to to change RBS and change promoter operations to test 100
+# generate 4 random numbers between 0.001 and 1000 to DO change RBS and change promoter operations RANDOMLY, to test 100
 # circuits with modified input signals and check if score improves
 best_score_loop = best_score
-# random.seed(12)
+seed(12)
+scores = []
 for i in range(100):
     print(f'Trying input circuit {i} out of 100')
-    # values = []
-    x = [0.001, 0.01, 0.1, 1, 10, 100, 1000]
+    values = []
+    # x = [0.001, 0.01, 0.1, 1, 10, 100, 1000]
     # generate random numbers between 0 and 1
-    #for n in range(4):
-        # values.append(0.001 + (random() * (1000 - 0.001)))
-        #values.append(random()) # try between 0 and 1
+    for n in range(4):
+        values.append(random()) # try between 0 and 1
     # modify input values using dna-engineering operations
-    [new_ymax_one, new_ymin_one] = change_promoter(ymax_one, ymin_one, choice(x))
-    [new_ymax_two, new_ymin_two] = change_promoter(ymax_two, ymin_two, choice(x))
-    new_beta_one = change_rbs(beta_one, choice(x))
-    new_beta_two = change_rbs(beta_two, choice(x))
+    [new_ymax_one, new_ymin_one] = change_promoter(ymax_one, ymin_one, choice(values))
+    [new_ymax_two, new_ymin_two] = change_promoter(ymax_two, ymin_two, choice(values))
+    new_beta_one = change_rbs(beta_one, choice(values))
+    new_beta_two = change_rbs(beta_two, choice(values))
     # change this parameters in the data
     data = modify_parameters_single_signal(data, best_input_signals[0], new_ymax_one, new_ymin_one, alpha_one, new_beta_one)
     data = modify_parameters_single_signal(data, best_input_signals[1], new_ymax_two, new_ymin_two, alpha_two, new_beta_two)
@@ -128,6 +130,8 @@ for i in range(100):
     m.get_results()
     # compare if new score is better
     res = CelloResult(results_dir=out_dir)
+    # append score of each tested circuit to plot afterwards
+    scores.append(res.circuit_score)
     if res.circuit_score > best_score_loop:
         print(f'Improved score: {res.circuit_score}  in comparison to original by delta = {res.circuit_score - best_score}')
         best_score_loop = res.circuit_score
@@ -135,6 +139,13 @@ for i in range(100):
         output_json(data, in_dir, new_file_optimized)
     else:
         print("Score did not improve")
+
+# plot results of the simulations
+plt.plot(scores)
+plt.ylabel("Scores")
+plt.xlabel("Circuit number")
+plt.title("Scores by randomly changing input parameters")
+plt.show()
 
 
 # if score doesn't improve significantly, use protein-engineering operations
@@ -164,10 +175,10 @@ data2 = open_json(in_dir, best_file)
 # do stretch operations in input signal with lowest ymax
 if ymax_one < ymax_two:
     [ymax_st, ymin_st] = stretch(ymax_one, ymin_one, 1.5)
-    data2 = modify_parameters_single_signal(data2, ymax_st, ymin_st, alpha_one, beta_one)
+    data2 = modify_parameters_single_signal(data2, best_input_signals[0], ymax_st, ymin_st, alpha_one, beta_one)
 else:
     [ymax_st, ymin_st] = stretch(ymax_two, ymin_two, 1.5)
-    data2 = stretch(ymax_st, ymin_st, alpha_two, beta_two)
+    data2 = modify_parameters_single_signal(data2, best_input_signals[1], ymax_st, ymin_st, alpha_two, beta_two)
 # convert new file to json and save to input directory
 last_input_file = f'new{chassis_name}.input.json'
 output_json(data2, in_dir, last_input_file)
@@ -191,7 +202,12 @@ q.get_results()
 # Fetch our Results.
 res3 = CelloResult(results_dir=out_dir)
 # print final circuit score and delta value
-print("The new score of the optimized circuit is:")
-print(res3.circuit_score)
-print(f"total improvement by delta = {best_score - res3.circuit_score}")
+if res3.circuit_score > best_score_loop:
+    print(f"Best score: {res3.circuit_score}")
+    print(f"total improvement by delta = {best_score - res3.circuit_score}")
+    best_score_loop = res3.circuit_score
+else:
+    print("Stretch operation did not improve the score!")
+    print(f"The best score was: {best_score_loop}")
+    print(f"total improvement by delta = {best_score - best_score_loop}")
 

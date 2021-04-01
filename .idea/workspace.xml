@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="09185019-7bd8-4f3e-abff-231c0ec34f8a" name="Default Changelist" comment="fixed file path issue">
+    <list default="true" id="09185019-7bd8-4f3e-abff-231c0ec34f8a" name="Default Changelist" comment="added monte carlo simulation (100 iterations)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_handling.py" beforeDir="false" afterPath="$PROJECT_DIR$/json_handling.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -90,7 +89,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617138827003</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="added monte carlo simulation (100 iterations)">
+      <created>1617246993226</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1617246993228</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -110,6 +116,7 @@
     <MESSAGE value="added file with helper functios for the optimization approach" />
     <MESSAGE value="cleaned main script" />
     <MESSAGE value="fixed file path issue" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed file path issue" />
+    <MESSAGE value="added monte carlo simulation (100 iterations)" />
+    <option name="LAST_COMMIT_MESSAGE" value="added monte carlo simulation (100 iterations)" />
   </component>
 </project>
