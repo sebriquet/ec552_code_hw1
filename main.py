@@ -184,7 +184,7 @@ last_input_file = f'new{chassis_name}.input.json'
 output_json(data2, in_dir, last_input_file)
 
 # Submit modified input file to Cello
-print("Improving score by stretching one of the input signals ...")
+print("Improving score by stretching one of the input signals...")
 q = CelloQuery(
    input_directory=in_dir,
    output_directory=out_dir,
@@ -209,5 +209,5 @@ if res3.circuit_score > best_score_loop:
 else:
     print("Stretch operation did not improve the score!")
     print(f"The best score was: {best_score_loop}")
-    print(f"total improvement by delta = {best_score - best_score_loop}")
+    print(f"total improvement by delta = {best_score_loop - best_score}")
 
