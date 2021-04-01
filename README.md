@@ -22,6 +22,6 @@ Program saves the modified input.json file with the optimized parameters corresp
 
 The optimization approach consists of random changes between 0 and 1 to the input signals using DNA-Engineering operations. Testing a total of 100 circuits, a plot depicting the score of each circuit will be created.
 
-Lastlt,the script displays the score for the original circuit witht the best two input signals as well as the score for the optimized circuit (using previous signals) and the delta value.
+Lastly,the script displays the score for the original circuit witht the best two input signals as well as the score for the optimized circuit (using previous signals) and the delta value.
 
 NOTE: The running time is ~2 hours.
