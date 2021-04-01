@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="09185019-7bd8-4f3e-abff-231c0ec34f8a" name="Default Changelist" comment="cleaned main script">
+    <list default="true" id="09185019-7bd8-4f3e-abff-231c0ec34f8a" name="Default Changelist" comment="fixed file path issue">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/json_handling.py" beforeDir="false" afterPath="$PROJECT_DIR$/json_handling.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -82,7 +83,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617117288585</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="fixed file path issue">
+      <created>1617138827003</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1617138827003</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -101,6 +109,7 @@
     <MESSAGE value="main file" />
     <MESSAGE value="added file with helper functios for the optimization approach" />
     <MESSAGE value="cleaned main script" />
-    <option name="LAST_COMMIT_MESSAGE" value="cleaned main script" />
+    <MESSAGE value="fixed file path issue" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed file path issue" />
   </component>
 </project>

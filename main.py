@@ -3,6 +3,10 @@ import os
 from json_handling import *
 from celloapi2 import CelloQuery, CelloResult
 from itertools import combinations
+from random import seed
+from random import random
+from random import choice
+
 
 # ASK USER TO PROVIDE FILE PATH OF INPUT AND OUTPUT DIRECTORIES AS WELL AS DESIRED GATE
 from click._compat import raw_input
@@ -85,13 +89,52 @@ def change_rbs(beta, x):
     return new_beta
 
 
-# try powers of 10 for x (to make weaker/stronger promoter and RBS)
-x_values = [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000]
-# test minimizing one signal and max the other
-[new_ymax_one, new_ymin_one] = change_promoter(ymax_one, ymin_one, 0.001)
-new_beta_one = change_rbs(beta_one, 0.001)
-[new_ymax_two, new_ymin_two] = change_promoter(ymax_two, ymin_two, 100)
-new_beta_two = change_rbs(beta_two, 100)
+# generate 4 random numbers between 0.001 and 1000 to to change RBS and change promoter operations to test 100
+# circuits with modified input signals and check if score improves
+best_score_loop = best_score
+# random.seed(12)
+for i in range(100):
+    print(f'Trying input circuit {i} out of 100')
+    # values = []
+    x = [0.001, 0.01, 0.1, 1, 10, 100, 1000]
+    # generate random numbers between 0 and 1
+    #for n in range(4):
+        # values.append(0.001 + (random() * (1000 - 0.001)))
+        #values.append(random()) # try between 0 and 1
+    # modify input values using dna-engineering operations
+    [new_ymax_one, new_ymin_one] = change_promoter(ymax_one, ymin_one, choice(x))
+    [new_ymax_two, new_ymin_two] = change_promoter(ymax_two, ymin_two, choice(x))
+    new_beta_one = change_rbs(beta_one, choice(x))
+    new_beta_two = change_rbs(beta_two, choice(x))
+    # change this parameters in the data
+    data = modify_parameters_single_signal(data, best_input_signals[0], new_ymax_one, new_ymin_one, alpha_one, new_beta_one)
+    data = modify_parameters_single_signal(data, best_input_signals[1], new_ymax_two, new_ymin_two, alpha_two, new_beta_two)
+    # write these values to new input json file
+    new_file = 'loop' + f'{chassis_name}.input.json'
+    output_json(data, in_dir, new_file)
+    # submit to cello
+    m = CelloQuery(
+        input_directory=in_dir,
+        output_directory=out_dir,
+        verilog_file=v_file,
+        compiler_options=options,
+        input_ucf=in_ucf,
+        input_sensors=new_file,
+        output_device=output_device_file,
+    )
+    # set inout signals to be the best two found before
+    m.set_input_signals(best_input_signals)
+    # get results
+    m.get_results()
+    # compare if new score is better
+    res = CelloResult(results_dir=out_dir)
+    if res.circuit_score > best_score_loop:
+        print(f'Improved score: {res.circuit_score}  in comparison to original by delta = {res.circuit_score - best_score}')
+        best_score_loop = res.circuit_score
+        new_file_optimized = 'best' + f'{chassis_name}.input.json'
+        output_json(data, in_dir, new_file_optimized)
+    else:
+        print("Score did not improve")
 
 
 # if score doesn't improve significantly, use protein-engineering operations
@@ -114,36 +157,41 @@ def decrease_slope(alpha, x):
     return new_alpha
 
 
-# WRITE AND SAVE MODIFIED INPUT JSON FILE
-# call modify_parameters_single_signal for both signals
-data = modify_parameters_single_signal(data, best_input_signals[0], new_ymax_one, new_ymin_one, alpha_one ,new_beta_one )
-data = modify_parameters_single_signal(data, best_input_signals[1], new_ymax_two, new_ymin_two, alpha_two, new_beta_two)
-
+# re-extract parameters from input files with parameters optimized in monte carlo
+best_file = '/best' + f'{chassis_name}.input.json'
+data2 = open_json(in_dir, best_file)
+[ymax_one, ymin_one, alpha_one, beta_one, ymax_two, ymin_two, alpha_two, beta_two] = extract_parameters(data2, best_input_signals)
+# do stretch operations in input signal with lowest ymax
+if ymax_one < ymax_two:
+    [ymax_st, ymin_st] = stretch(ymax_one, ymin_one, 1.5)
+    data2 = modify_parameters_single_signal(data2, ymax_st, ymin_st, alpha_one, beta_one)
+else:
+    [ymax_st, ymin_st] = stretch(ymax_two, ymin_two, 1.5)
+    data2 = stretch(ymax_st, ymin_st, alpha_two, beta_two)
 # convert new file to json and save to input directory
-new_input_file = f'new{chassis_name}.input.json'
-output_json(data, in_dir, new_input_file)
+last_input_file = f'new{chassis_name}.input.json'
+output_json(data2, in_dir, last_input_file)
 
 # Submit modified input file to Cello
-# Set up input files.
-new_input_sensor_file = f'new{chassis_name}.input.json'
+print("Improving score by stretching one of the input signals ...")
 q = CelloQuery(
-    input_directory=in_dir,
-    output_directory=out_dir,
-    verilog_file=v_file,
-    compiler_options=options,
-    input_ucf=in_ucf,
-    input_sensors=new_input_sensor_file,
-    output_device=output_device_file,
-)
+   input_directory=in_dir,
+   output_directory=out_dir,
+   verilog_file=v_file,
+   compiler_options=options,
+   input_ucf=in_ucf,
+   input_sensors=last_input_file,
+   output_device=output_device_file,
+ )
 
 # Submit our query to Cello. This might take a second.
 # set inout signals to be the best two found before
 q.set_input_signals(best_input_signals)
 q.get_results()
 # Fetch our Results.
-res = CelloResult(results_dir=out_dir)
-print(res.circuit_score)
+res3 = CelloResult(results_dir=out_dir)
+# print final circuit score and delta value
+print("The new score of the optimized circuit is:")
+print(res3.circuit_score)
+print(f"total improvement by delta = {best_score - res3.circuit_score}")
 
-# print how much the circuit score improved after optimization
-delta = res.circuit_score - best_score
-print("Circuit improved by", delta)
