@@ -1,4 +1,4 @@
-# ec552_code_hw1
+# Circuit Optimization using Cello and MonteCarlo 
 Python script for Homework 1 (EC 552: Computational Synthetic Biology for Engineers)
 
 To run the user needs to input the paths for the input directory and the output directory.
