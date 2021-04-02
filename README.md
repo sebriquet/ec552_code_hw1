@@ -30,7 +30,7 @@ NOTE: The running time is ~2 hours.
 
 To run the script, please follow the instructions for the installation of CelloAPI2.
 Once you have cello installed and running on your compueter, you can simply run the command:
-  python3 main.py
+  - python3 main.py
   
 A folder containing all required input files has been provided under "input".
 Plase be careful when prompt to provide the path for the input and output directory as it is case sensitive.
