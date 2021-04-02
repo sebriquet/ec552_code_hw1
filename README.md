@@ -24,7 +24,7 @@ The optimization approach consists of random changes between 0 and 1 to the inpu
 
 Lastly,the script displays the score for the original circuit witht the best two input signals as well as the score for the optimized circuit (using previous signals) and the delta value.
 
-NOTE: The running time is ~2 hours.
+NOTE: The running time is ~2-3 hours depending on the booleat gate to be evualuated (struct.v takes longer).
 
 ## Compiling and Running the Code:
 
