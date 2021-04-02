@@ -35,7 +35,7 @@ Once you have cello installed and running on your compueter, you can simply run 
 A folder containing all required input files has been provided under "input".
 Plase be careful when prompt to provide the path for the input and output directory as it is case sensitive.
 
-NOTE: The code was tested on MacOS Catalina Version: 10.15.7, using PyCharm on a virtual enviroment. 
+NOTE: The code was tested on MacOS Catalina Version: 10.15.7, using Python 3.9.2
 
 Sample Run:
 <img width="727" alt="Screen Shot 2021-04-02 at 5 13 50 PM" src="https://user-images.githubusercontent.com/57968955/113454735-e3427580-93d6-11eb-8521-f33dfcfd1f56.png">
