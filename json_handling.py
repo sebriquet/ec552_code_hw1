@@ -1,5 +1,6 @@
 import json
 import os
+from random import choice
 
 
 # file with helper functions to run main script
@@ -25,8 +26,12 @@ def output_json(data, in_dir, new_file_name):
 
 # function to extract parameters from  best 2 input signals
 def extract_parameters(data, best_input_signals):
-    signal_one = best_input_signals[0]
-    signal_two = best_input_signals[1]
+    if len(best_input_signals) > 2: # checks whether gate is struct.v
+        signal_one = choice(best_input_signals)
+        signal_two = choice(best_input_signals)
+    else:
+        signal_one = best_input_signals[0]
+        signal_two = best_input_signals[1]
     # check for signal one
     if signal_one == 'LacI':
         parameters_one = data[1].get("parameters")
@@ -82,5 +87,3 @@ def modify_parameters_single_signal(data, signal_name, new_ymax, new_ymin, new_a
         data[10]['parameters'][3]['value'] = new_beta
     return data
 
-
-# write function to create combinations of modified parameters

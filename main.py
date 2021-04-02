@@ -38,8 +38,12 @@ data = open_json(in_dir, input_sensor_file)
 output_device_file = f'{chassis_name}.output.json'
 in_ucf = f'{chassis_name}.UCF.json'
 # number of inputs into the circuit:
-signal_input = 2
-# define best circuit score from best 2 input signals (out of the 4 available)
+# check whether gate to test is struct.v
+if v_file == 'struct.v':
+    signal_input = 3
+else:
+    signal_input = 2
+# define best circuit score from best input signals (out of the 4 available)
 best_score = 0
 best_input_signals = None
 q = CelloQuery(
