@@ -25,3 +25,18 @@ The optimization approach consists of random changes between 0 and 1 to the inpu
 Lastly,the script displays the score for the original circuit witht the best two input signals as well as the score for the optimized circuit (using previous signals) and the delta value.
 
 NOTE: The running time is ~2 hours.
+
+## Compiling and Running the Code:
+
+To run the script, please follow the instructions for the installation of CelloAPI2.
+Once you have cello installed and running on your compueter, you can simply run the command:
+  python3 main.py
+  
+A folder containing all required input files has been provided under "input".
+Plase be careful when prompt to provide the path for the input and output directory as it is case sensitive.
+
+NOTE: The code was tested on MacOS Catalina Version: 10.15.7, using PyCharm on a virtual enviroment. 
+
+Sample Run:
+<img width="727" alt="Screen Shot 2021-04-02 at 5 13 50 PM" src="https://user-images.githubusercontent.com/57968955/113454735-e3427580-93d6-11eb-8521-f33dfcfd1f56.png">
+
